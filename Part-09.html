@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>		
+		<title>09. 对象原型prototype - Part1 - By Wu Jian Ping</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="lib/shCoreDefault.css" type="text/css" />
+		<link rel="stylesheet" href="lib/style.css" type="text/css" />
+    	<script type="text/javascript" src="lib/shCore.js"></script>
+    	<script type="text/javascript" src="lib/shBrushJScript.js"></script>
+    	<script type="text/javascript" src="lib/jquery-1.9.0.js"></script>
+    	<script type="text/javascript">
+    		jQuery(function(){
+    			jQuery('#container').html(jQuery('#content').html());
+				SyntaxHighlighter.all();
+			});
+    	</script>
+
+		<script type="text/javascript" id='content'>
+			function Person(name){
+				this.name = name;
+			}
+
+			Person.prototype.isTheSamePerson = function(name){
+				return this.name == name;
+			};
+
+			var person = new Person("张三");
+			console.log(person.isTheSamePerson("李四"));
+			console.log(person.isTheSamePerson("张三"));
+
+			//通过new创建出来的对象person，将继承Person.
+			//prototype的所有属性，并且Person.
+			//prototype有一个指向Person函数的构造函数属性。
+
+			// Person.prototype是存在于person的对象原型链中
+			console.log(Person.prototype.isPrototypeOf(person));
+
+			//person对象是通过Person函数（构造函数）创建而来
+			console.log(person.constructor == Person);
+			//Person.prototype有一个属性（constrcutor）是指向Person函数（或者称之为person对象的构造函数）
+			console.log(Person.prototype.constructor == person.constructor);			
+
+			//person对象没有构造函数，构造函数属于Person.prototype
+			console.log(person.hasOwnProperty('constructor'));//false
+			console.log(Person.prototype.hasOwnProperty('constructor'));//true
+
+			//Person.prototype调用isPrototypeOf,hasOwnProperty，
+			//但是这些函数并不属于Person.prototype,还有toString()等等， 
+			//在JavaScript中Object.prototype是所有原型的最终基础原型
+			//（注：Object.prototype是没有原型, 即Object.prototype.prototype == undefined）,
+			//因此上述函数定义在Object.property中。
+			console.log(Object.prototype);
+			console.log(Object.prototype.prototype);
+			//toString执行流程, 当你尝试访问person对象的toString函数时，
+			//JavaScript检查该方法是否在该对象中定义，
+			//如果不是，则检查对象的原型是否有定义，
+			//如果还不是，则检查该对象的原型的原型，一直找到Object.prototype。
+			console.log(person.toString());
+		</script>
+	</head>
+	<body>
+		<h1>09. 对象原型prototype - Part1</h1>
+
+		<pre class="brush:js" id='container'>
+		</pre>
+	</body>
+</html>

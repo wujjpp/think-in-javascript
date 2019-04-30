@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>		
+		<title>04. 静态方法 - By Wu Jian Ping</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="lib/shCoreDefault.css" type="text/css" />
+		<link rel="stylesheet" href="lib/style.css" type="text/css" />
+    	<script type="text/javascript" src="lib/shCore.js"></script>
+    	<script type="text/javascript" src="lib/shBrushJScript.js"></script>
+    	<script type="text/javascript" src="lib/jquery-1.9.0.js"></script>
+    	<script type="text/javascript">
+    		jQuery(function(){
+    			jQuery('#container').html(jQuery('#content').html());
+				SyntaxHighlighter.all();
+			});
+    	</script>
+
+		<script type="text/javascript" id='content'>
+			function MyObject(name){
+				console.log('Hello,' + name);
+			}
+			//在 JavaScript 中，对象只是一组Key/Value对，
+			//就是说，将 JavaScript 对象视为包含字符串关键字的词典。
+			//我们可以使用熟悉的“.”（点）运算符或“[]”运算符，来获得和设置对象的属性，
+			//这是在处理词典时通常采用的方法。
+			MyObject.text = "String1";
+			MyObject["text2"] = "String2";
+			MyObject.show1 = function(){console.log('show1');};
+			MyObject["show2"] = function(){console.log('show2');};
+
+			console.log(MyObject.text);
+			console.log(MyObject.text2);
+			MyObject.show1();
+			MyObject.show2();
+
+			//思考：如何为所有类创建静态函数，或者属性？（对象原型prototype - Part2）
+		</script>
+	</head>
+	<body>
+		<h1>04. 静态方法</h1>
+
+		<pre class="brush:js" id='container'>
+		</pre>
+	</body>
+</html>

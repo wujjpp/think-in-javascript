@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>		
+		<title>16. 常用知识点汇总 - By Wu Jian Ping</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="lib/shCoreDefault.css" type="text/css" />
+		<link rel="stylesheet" href="lib/style.css" type="text/css" />
+    	<script type="text/javascript" src="lib/shCore.js"></script>
+    	<script type="text/javascript" src="lib/shBrushJScript.js"></script>
+    	<script type="text/javascript" src="lib/jquery-1.9.0.js"></script>
+    	<script type="text/javascript">
+    		jQuery(function(){
+    			jQuery('#container').html(jQuery('#content').html());
+				SyntaxHighlighter.all();
+			});
+    	</script>
+
+		<script type="text/javascript" id='content'>
+			//1. 习惯性在你的js文件的第一行加上;
+			;
+			
+			//2. 对象定义
+			var obj = {
+				name:'张三', 
+				age: 25,
+				toString: function(){
+					return 'name:' + this.name + ', age:' + age;
+				}
+			};
+
+			//3. 类定义
+			function Person(name, age){
+				//public属性
+				this.name = name;
+				this.age = age;
+				//方法
+				this.toString = function(){
+					return 'name:' + name + ', age=' + age;
+				}
+			}
+			//3.1 通过prototype定义函数， 优势：函数设置在原型上，即使已经创建对象，也将具有该函数
+			Person.prototype.process = function(){
+				console.log('process called');
+			};
+
+			//4. 通过原型扩展string类,为其增加endWith函数
+			String.prototype.endWith = function (string) {
+			    var matched = false;
+			    if (this != null && this != undefined 
+			    	&& string != null && string != undefined) {
+			    	var value = this.toLowerCase();
+			    	string = string.toLowerCase();
+			    	if (value.length >= string.length) {
+			        	var s = value.substring(value.length - string.length);
+			        	if (s == string) {
+			        		matched = true;
+            			}
+        			}
+    			}
+    			return matched;
+			};			
+			var s = 'Hello, World';
+			console.log(s.endWith('world'));
+			console.log(s.endWith('world1'));
+
+			
+			//5. 匿名函数定义
+			var func = function(name){console.log(name);};
+			
+			//6. 直接执行匿名函数, jQuery插件使用该技术实现$无冲突
+			(function (name){
+				console.log(name);
+			})("张三");
+
+			//7. jQuery, extJs等流行框架，大多采用类似方式设置
+			function Car(option){
+				this.name = option.name;
+				this.start = function(){
+					/*触发事件*/
+					option.onStartedCallback();
+				};				
+				this.getSpeed = function(){
+					return Math.round(Math.random() * 10000);
+				};
+			}
+			var settings = {
+				name:'BMW', 
+				/*事件回调*/
+				onStartedCallback:function(){
+					console.log("Car started");
+				}
+			};
+			var car = new Car(settings);
+			car.start();
+			console.log(car.getSpeed());
+			
+			//8. 单独为具体的某个实例添加方法
+			car.stop = function(){
+				console.log("Car stoped");
+			}
+			car.stop();
+
+			//9. 单独为具体的某个实例添加属性
+			car.owner = "张三";
+			console.log(car.owner);
+
+			//10. 你可能还会看到操作符===，或者!==
+			var s = "123";
+			var n = 123;
+			console.log(s == n);//true;
+			console.log(s === n); //false;
+
+			//最后，JavaScript不仅仅能运行在客户端，Node.js借助Chrome V8引擎，使得JavaScript代码能像Native Code那样执行在Server端
+		</script>
+	</head>
+	<body>
+		<h1>16. 常用知识点汇总</h1>
+
+		<pre class="brush:js" id='container'>
+		</pre>	
+	</body>
+</html>

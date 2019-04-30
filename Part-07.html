@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+	<head>		
+		<title>07. 深入JavaScript中的this - By Wu Jian Ping</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="lib/shCoreDefault.css" type="text/css" />
+		<link rel="stylesheet" href="lib/style.css" type="text/css" />
+    	<script type="text/javascript" src="lib/shCore.js"></script>
+    	<script type="text/javascript" src="lib/shBrushJScript.js"></script>
+    	<script type="text/javascript" src="lib/jquery-1.9.0.js"></script>
+    	<script type="text/javascript">
+    		jQuery(function(){
+    			jQuery('#container').html(jQuery('#content').html());
+				SyntaxHighlighter.all();
+			});
+    	</script>
+
+		<script type="text/javascript" id='content'>
+			//由于其运行期绑定的特性，JavaScript 中的 this 含义要丰富得多，
+			//它可以是全局对象、当前对象或者任意对象，这完全取决于函数的调用方式。
+			//JavaScript 中函数的调用有以下几种方式：
+				//1.作为对象方法调用
+				//2.作为函数调用
+				//3.作为内部函数调用
+				//3.作为构造函数调用
+				//4.使用 apply 或 call 调用。
+			
+			//作为对象方法调用
+			var person1 = {
+				age:0,				
+				setAge:function(age){
+					this.age = age;
+				}
+			};
+			person1.setAge(20);
+			console.log('person1.age的值为期望的' + person1.age);
+			
+			//作为函数调用
+			function foo(x){
+				this.x = x;
+			}
+			foo(5);
+			console.log('产生全局变量x, 值为:' + this.x);//由此可见已经产生一个name为x的全局变量
+
+			//作为内部函数调用
+			var person2 = {
+				age:0,
+				setAge: function(age){
+					var changeAge = function(age){
+						this.age = age;
+					};
+					changeAge(age);
+				}
+			};
+			person2.setAge(20);
+			console.log('person2中的age并没有发生变化，还是初始化值' + person2.age);
+			console.log('但是产生了一个全局变量age, 值为:' + this.age);
+
+			//改良版，利用闭包特性
+			var person3 = {
+				age:0,
+				setAge: function(age){
+					var self = this;
+					var changeAge = function(age){
+						self.age = age;
+					};
+					changeAge(age);
+				}
+			}; 
+			person3.setAge(20);
+			console.log('person3.age为期望的' + person3.age);
+
+			//作为构造函数函数调用
+			function Person(age){
+				this.age = age;
+			}
+			var person4 = new Person(25);
+			console.log('person4.age为期望的' + person4.age);
+
+			//使用apply或者call调用			
+			function Student(age){
+				this.age = age;
+				this.setAge = function(age){
+					this.age = age;
+					this.foo = function(){
+						console.log('foo called');
+					};
+				};
+			}
+			
+			var student2 = {age:0};
+			var student3 = {age:0};
+
+			Student.call(student2, 25);//当调用Student的call函数时, student2就会拥有Student"类"的所有属性和方法
+			console.log('student2.age值为', student2.age);
+			student2.setAge(22);//此时setAge函数中的this就是student2了
+			console.log('student2.age值为', student2.age);
+
+			Student.apply(student3, [30]);//当使用调用Student的apply函数时, student3就会拥有Student"类"的所有属性和方法
+			console.log('student3.age值为', student3.age);
+			student3.setAge(35);//此时setAge函数中的this就是student3了
+			console.log('student3.age值为', student3.age);
+			
+			//apply函数和call函数功能相似，区别在于参数存在形式。
+			//obj.call(target, par1, par2);
+			//obj.apply(target, [par1, par2]);
+
+			//var student1 = new Student(10);
+
+			//var student4 = {age:0};
+			//var student5 = {age:0};
+			//student1.setAge.call(student4, 40);
+			//console.log('student4.age值为', student4.age);
+			//student4.foo();
+
+			//student1.setAge.apply(student5,[50]);
+			//console.log('student5.age值为', student5.age);
+			//student5.foo();
+
+
+
+			//Read more via http://yehudakatz.com/2011/08/11/understanding-javascript-function-invocation-and-this/
+		</script>
+	</head>
+	<body>
+		<h1>07. 深入JavaScript中的this</h1>
+		<pre class="brush:js" id='container'>
+		</pre>
+	</body>
+</html>

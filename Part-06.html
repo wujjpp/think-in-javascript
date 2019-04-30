@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>		
+		<title>06. 初探JavaScript中的this - By Wu Jian Ping</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="lib/shCoreDefault.css" type="text/css" />
+		<link rel="stylesheet" href="lib/style.css" type="text/css" />
+    	<script type="text/javascript" src="lib/shCore.js"></script>
+    	<script type="text/javascript" src="lib/shBrushJScript.js"></script>
+    	<script type="text/javascript" src="lib/jquery-1.9.0.js"></script>
+    	<script type="text/javascript">
+    		jQuery(function(){
+    			jQuery('#container').html(jQuery('#content').html());
+				SyntaxHighlighter.all();
+			});
+    	</script>
+
+		<script type="text/javascript" id='content'>
+			var description = "global description";
+			function displayDescription(){
+				console.log(this.description);
+			}	
+			displayDescription();
+
+			//obj1
+			var obj1 = {
+				description: "obj1's description",
+				display: displayDescription
+			};
+			obj1.display();
+
+			//obj2
+			var obj2 = {
+				description: "obj2's description",
+				display: displayDescription
+			};
+			obj2.display();
+
+			//obj3
+			//call 函数
+			var obj3 = {
+				description: "obj3's description"
+			};
+			displayDescription.call(obj3);//通过displayDescription函数对象的call函数调用该函数，
+			//第一个参数，就是this
+
+			//obj4
+			//每个function对象都有一个call函数，
+			//当调用function的call函数时，
+			//第一个参数将在function中充当"this", 
+			//这种机制对于调用基类构造函数函数来说非常有用。
+			function foo(name){
+				console.log('Hello, ' + name);
+				console.log(this.description);
+			}
+			var obj4 = {description: "obj4's description"};
+			foo.call(obj4, '张三');
+
+			//一个原则：假如某个function中包含this, 
+			//但是在未将该function(对象)初始化
+			//（执行 new）之前，千万别调用，
+			//否则将违反全局命名空间，
+			//因为在该调用中，"this"将应用全局变量，而这个操作将会给你的程序带来灾难
+			//函数isNaN, 用来判断是否为NaN
+			var n = parseInt("abc");//parseInt 方法返回与保存在 numString 中的数字值相等的整数。
+			//如果 numString 的前缀不能解释为整数，
+			//则返回 NaN（而不是数字）。
+			console.log(n); 
+			console.log(n == NaN);//虽然n是NaN,但是NaN不与任何值相等，包括它自己
+			console.log(isNaN(n));//JavaScript使用isNaN来判定n是否为NaN
+			function changeIsNaN(){
+				this.isNaN = function(){
+					return "I don't know";
+				};
+			}
+			changeIsNaN();
+			console.log(isNaN(n));
+
+			//在C#或者Java当中，this就是对象本身，
+			//是在JavaScript中，this会随着位置的变化而发生变化
+			var ko = {
+				computed:function(){
+					console.log(this.__proto__.constructor);
+			}};
+			function AppViewModel() {
+    			this.firstName = 'a';
+    			this.lastName = 'b';
+    			this.foo1 = ko.computed;
+    			this.foo2 = function(){return ko.computed;};			
+			}
+			var model = new AppViewModel();
+			model.foo1();
+			model.foo2()();
+		</script>
+	</head>
+	<body>
+		<h1>06. 初探JavaScript中的this</h1>
+		<pre class="brush:js" id='container'>
+		</pre>
+	</body>
+</html>

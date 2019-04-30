@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>01. 常见定义函数的几种方法 - By Wu Jian Ping</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />		
+		
+		<link rel="stylesheet" href="lib/shCoreDefault.css" type="text/css" />
+		<link rel="stylesheet" href="lib/style.css" type="text/css" />
+    	
+    	<script type="text/javascript" src="lib/shCore.js"></script>
+    	<script type="text/javascript" src="lib/shBrushJScript.js"></script>
+    	<script type="text/javascript" src="lib/jquery-1.9.0.js"></script>
+    	<script type="text/javascript">
+    		jQuery(function(){
+    			jQuery('#container').html(jQuery('#content').html());
+				SyntaxHighlighter.all();
+			});
+    	</script>
+
+		<script type="text/javascript" id='content'>
+			/*定义函数方法1*/
+			function hello(name){
+				console.log('Hello, ' + name);
+			}
+			hello("张三");
+
+			/*定义函数方法2*/
+			var hello2 = function(name){
+				console.log('Hello, ' + name);
+			}
+			hello2("李四");
+
+			/*定义函数方法3*/
+			var add = new Function("x", "y", "return(x + y)");
+			console.log(add(1,2));
+		</script>
+	</head>
+	<body>
+		<h1>01. 定义函数的几种方法</h1>
+
+		<pre class="brush:js" id='container'>
+		</pre>
+	</body>
+</html>

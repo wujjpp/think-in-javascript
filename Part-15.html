@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>		
+		<title>15. 模拟命名空间 - By Wu Jian Ping</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="lib/shCoreDefault.css" type="text/css" />
+		<link rel="stylesheet" href="lib/style.css" type="text/css" />
+    	<script type="text/javascript" src="lib/shCore.js"></script>
+    	<script type="text/javascript" src="lib/shBrushJScript.js"></script>
+    	<script type="text/javascript" src="lib/jquery-1.9.0.js"></script>
+    	<script type="text/javascript">
+    		jQuery(function(){
+    			jQuery('#container').html(jQuery('#content').html());
+				SyntaxHighlighter.all();
+			});
+    	</script>
+
+		<script type="text/javascript" id='content'>
+			//定义system namespace
+			var Sys = {};
+			//在system namespace下定义class
+			Sys.OS = function(){};
+			//为os类定义函数getProcess
+			Sys.OS.prototype.getProcess = function(){
+				console.log('getProcess called');
+			};
+
+			var env = new Sys.OS();
+			env.getProcess();
+
+			//namespace 嵌套
+			Sys.IO = {};
+			//在namespace system.io 下定义file class
+			Sys.IO.Directory = function(){};
+			Sys.IO.Directory.prototype.getFiles = function(path){
+				console.log('list file names for directory ' + path);
+			};
+
+			var dir = new Sys.IO.Directory();
+			dir.getFiles('c:\\');
+
+			//当namespace过长时, C#中using io = system.io;
+			var io = Sys.IO;
+			var obj = new io.Directory();
+			obj.getFiles('d:\\');
+		</script>
+	</head>
+	<body>
+		<h1>15. 模拟命名空间</h1>
+
+		<pre class="brush:js" id='container'>
+		</pre>	
+	</body>
+</html>

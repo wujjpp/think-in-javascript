@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>		
+		<title>12. 模拟私有变量 - By Wu Jian Ping</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="lib/shCoreDefault.css" type="text/css" />
+		<link rel="stylesheet" href="lib/style.css" type="text/css" />
+    	<script type="text/javascript" src="lib/shCore.js"></script>
+    	<script type="text/javascript" src="lib/shBrushJScript.js"></script>
+    	<script type="text/javascript" src="lib/jquery-1.9.0.js"></script>
+    	<script type="text/javascript">
+    		jQuery(function(){
+    			jQuery('#container').html(jQuery('#content').html());
+				SyntaxHighlighter.all();
+			});
+    	</script>
+
+		<script type="text/javascript" id='content'>			
+			//正常情况下，无法从函数以外访问函数内的本地变量。
+			//函数退出之后，由于各种实际原因，该本地变量将永远消失。
+			//但是，如果该本地变量被内部函数的闭包捕获，它就会生存下来。
+			//这一事实是模拟 JavaScript 私有属性的关键。假设有一个 Person 类：
+			function Person(name,age){
+				//参数 name 和 age 是构造函数 Person 的本地变量。
+				//Person 返回时，name 和 age 应当永远消失。
+				//但是，它们被作为 Person 实例的方法而分配的四个内部函数（闭包）捕获，
+				//实际上这会使 name 和 age 继续存在，但只能严格地通过这四个方法访问它们
+				this.getName = function(){return name;};
+				//this.setName = function(newName){name = name;};
+				this.getAge = function(){return age;};
+				this.setAge = function(newAge){age = newAge;};
+
+				//这样写的话，相当于添加了一个public的name属性
+				//this.name = name;
+
+				//未在构造函数中初始化的私有成员可以成为构造函数的本地变量
+				var title;
+				this.getTitle = function(){return title;};
+				this.setTitle = function(newTitle){title = newTitle;};
+
+				this.toString = function(){
+					return 'name:' + name + ", age:" +  age + ", title:" + title;
+				};
+			}
+
+			var p1 = new Person("张三", 25);
+			console.log(p1.toString());
+
+			p1.setAge(22);
+			console.log(p1.toString());
+
+			p1.setTitle('developer');
+			console.log(p1.toString());
+
+			//这些私有成员与我们期望从 Java或者C# 中产生的私有成员略有不同。
+			//在 Java或者C# 中，类的公用方法可以访问它的私有成员。
+			//但在 JavaScript 中，只能通过在其闭包内拥有这些私有成员的方法来访问私有成员
+			//（由于这些方法不同于普通的公用方法，它们通常被称为特权方法）。
+			//因此，在 Person 的公用方法中，
+			//仍然必须通过私有成员的特权访问器方法才能访问私有成员
+			Person.prototype.otherFunction = function(){
+				//下面这行代码不工作
+				//console.log(name);		
+				console.log(this.getName());
+			};
+
+		</script>
+	</head>
+	<body>
+		<h1>12. 模拟私有变量</h1>
+
+		<pre class="brush:js" id='container'>
+		</pre>	
+	</body>
+</html>

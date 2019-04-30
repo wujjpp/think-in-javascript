@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>		
+		<title>13. 模拟继承 - By Wu Jian Ping</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="lib/shCoreDefault.css" type="text/css" />
+		<link rel="stylesheet" href="lib/style.css" type="text/css" />
+    	<script type="text/javascript" src="lib/shCore.js"></script>
+    	<script type="text/javascript" src="lib/shBrushJScript.js"></script>
+    	<script type="text/javascript" src="lib/jquery-1.9.0.js"></script>
+    	<script type="text/javascript">
+    		jQuery(function(){
+    			jQuery('#container').html(jQuery('#content').html());
+				SyntaxHighlighter.all();
+			});
+    	</script>
+
+		<script type="text/javascript" id='content'>			
+			//定义Person
+			function Person(name){
+				this.getName = function(){return name;};
+				this.setName = function(newName){name = newName;};
+			}
+			Person.prototype.toString = function(){
+				return "name:" + this.getName();
+			};
+			//定义Student
+			function Student(name, studentNo){
+				//C# public Student() : base(name){}
+				Person.call(this, name);
+				this.getStudentNo = function(){return studentNo;};
+				this.setStudentNo = function(newStudentNo){StudentNo = newStudentNo;};
+			}
+
+			//还记得吗？Student.prototype.constructor指向Student函数(Refer: Part-8.html)
+			console.log(Student.prototype.constructor == Student);			
+			//创建一个Person对象，并且将其指派成Student.prototype		
+			Student.prototype = new Person();			
+			//因为设置了Student.prototype导致Student.prototype.constructor指向了Person,这不是我们期望的。
+			console.log(Student.prototype.constructor == Person);
+			//因此我们需要重新设定Student.prototype.constructor, 这行代码也可以不需要，但是考虑到完整性，还是设置一下	
+			Student.prototype.constructor = Student;
+			//再检测一下，确保无误
+			console.log(Student.prototype.constructor == Student);			
+
+			//override Person.prototype.toString函数
+			Student.prototype.toString = function(){
+				return "name:" + this.getName() + ", studentNo:" + this.getStudentNo();
+			};
+
+			var person = new Person("张三");
+			console.log(person.toString());
+
+			var student = new Student("张三", "0001");
+			console.log(student.toString());
+
+			//检测对象student是否为Student类型
+			console.log(student instanceof Student);
+			//检测对象student是否为Person类型
+			console.log(student instanceof Person);
+			//检测对象student是否为Object类型
+			console.log(student instanceof Object);
+
+			//检测对象的prototype
+			console.log(student.__proto__ == Student.prototype);
+			console.log(student.__proto__.__proto__ == Person.prototype);			
+
+			Person.prototype.func1 = function(){
+				console.log('func1 defined in Person.prototype');
+			};
+			Student.prototype.func2 = function(){
+				console.log('func2 defined in Student.prototype');
+			};
+			person.func1();
+			student.func1();
+			student.func2();
+			//override func1 defined in Person.prototype
+			Student.prototype.func1 = function(){				
+				console.log('func1 defined in Student.prototype');
+			};
+			student.func1();
+		</script>
+	</head>
+	<body>
+		<h1>13. 模拟继承</h1>
+
+		<pre class="brush:js" id='container'>
+		</pre>	
+	</body>
+</html>

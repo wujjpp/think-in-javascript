@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>		
+		<title>08. 资源浪费！！！ - By Wu Jian Ping</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="lib/shCoreDefault.css" type="text/css" />
+		<link rel="stylesheet" href="lib/style.css" type="text/css" />
+    	<script type="text/javascript" src="lib/shCore.js"></script>
+    	<script type="text/javascript" src="lib/shBrushJScript.js"></script>
+    	<script type="text/javascript" src="lib/jquery-1.9.0.js"></script>
+    	<script type="text/javascript">
+    		jQuery(function(){
+    			jQuery('#container').html(jQuery('#content').html());
+				SyntaxHighlighter.all();
+			});
+    	</script>
+
+		<script type="text/javascript" id='content'>
+			function Person1(name){
+				this.name = name;
+				this.isTheSamePerson = function(name){
+					return this.name == name; 
+				};
+			}
+			var p1 = new Person1("张三");
+			var p2 = new Person1("李四");
+			//在上面的Person1定义中， 我们定义了名为name的构造函数参数，
+			//使用Person1作为他的构造函数所创建的对象都有他自己的name副本，
+			//这个是我们要的，毕竟每个对象都有自己的实例变量来维持其状态。
+			//但是在 JavaScript 中，对象只是一组Key/Value对，
+			//因此每个Person实例都有isTheSamePerson方法的副本，似乎有些浪费
+			function Person2(name){
+				this.name = name;
+			}
+			var p3 = new Person2("张三");
+			var p4 = new Person2("李四");
+
+			p3.isTheSamePerson = function(name){this.name == name};
+			p4.isTheSamePerson = function(name){this.name == name};
+			
+
+			//但是通过下面的方式可以避免这个问题。
+			function isTheSamePerson(name){
+				return this.name == name;
+			}			
+			function Person(name){
+				this.name = name;
+				this.isTheSamePerson = isTheSamePerson;				
+			}
+			var person1 = new Person("张三");
+			console.log(person1.isTheSamePerson("张三"));
+			//问题来了，随着类似isTheSamePerson全局函数的增加，越来越难维护了，
+			//而随着类的增加，这个问题将变得更加严重，How to...? ---->原型			
+		</script>
+	</head>
+	<body>
+		<h1>08. 资源浪费！！！</h1>
+
+		<pre class="brush:js" id='container'>
+		</pre>
+	</body>
+</html>

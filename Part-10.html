@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>		
+		<title>10. 对象原型prototype - Part2 - By Wu Jian Ping</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="lib/shCoreDefault.css" type="text/css" />
+		<link rel="stylesheet" href="lib/style.css" type="text/css" />
+    	<script type="text/javascript" src="lib/shCore.js"></script>
+    	<script type="text/javascript" src="lib/shBrushJScript.js"></script>
+    	<script type="text/javascript" src="lib/jquery-1.9.0.js"></script>
+    	<script type="text/javascript">
+    		jQuery(function(){
+    			jQuery('#container').html(jQuery('#content').html());
+				SyntaxHighlighter.all();
+			});
+    	</script>
+
+		<script type="text/javascript" id='content'>
+			function Person(){}
+
+			var p1 = new Person();
+			var p2 = new Person();
+
+			//继承原型对象的对象上可以立即呈现对原型所做的更改，即使是在创建这些对象之后。
+			Person.prototype.sayHello = function(){
+				console.log('Say Hello');
+			};
+			p1.sayHello();
+			p2.sayHello();
+
+			//如果在对象中定义了属性/方法，则该对象的原型中将隐藏同名的属性/方法。例如，通过在 p1 中定义sayHello方法，可以改写 Person.prototype 的 sayHello 方法。
+			p1.sayHello = function(){console.log('Dont say Hello');};
+			p1.sayHello();
+			p2.sayHello();
+
+			//toString定义在Object.prototype中，通过定义Person.prototype.toString改写toString函数
+			console.log(p1.toString());
+			Person.prototype.toString = function(){
+				return "toString() be called";
+			};
+			console.log(p1.toString());
+
+			//在Chrome和Firefox里原型的对象可以通过对象__proto__属性访问
+			//Refer:http://www.mollypages.org/misc/js.mp
+			function Foo(){}
+			var f1 = new Foo();
+			console.log(f1.__proto__ === Foo.prototype);
+			console.log(f1.__proto__.__proto__ === Object.prototype);
+			console.log(Object.prototype.__proto__ == null);
+			console.log(Object.prototype=== Function.prototype.__proto__);
+
+			console.log(Foo.__proto__ === Function.prototype);
+			console.log(Object.__proto__ === Function.prototype);
+			console.log(Function.__proto__ === Function.prototype);
+
+			console.log(Foo.prototype.constructor === Foo);
+			console.log(Object.prototype.constructor === Object);
+			console.log(Function.prototype.constructor === Function);
+
+			var func1 = new Function('x', 'y', 'return x + y');
+			console.log(func1.__proto__ === Function.prototype);
+
+			//为所有Function(类)创建静态函数
+			Function.prototype.myfoo = function(){return 'myfoo called'};
+			console.log(String.myfoo());		
+
+			//一切皆对象
+			//对象根据创建方式可以分为3种：
+			//1. 通过new手工创建
+			//2. 函数本身
+			//3. 函数原型
+
+		</script>
+	</head>
+	<body>
+		<h1>10. 对象原型prototype - Part2</h1>
+
+		<pre class="brush:js" id='container'>
+		</pre>	
+	</body>
+</html>

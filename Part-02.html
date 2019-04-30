@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>		
+		<title>02. 函数当作变量、参数、返回值、属性 - By Wu Jian Ping</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="lib/shCoreDefault.css" type="text/css" />
+		<link rel="stylesheet" href="lib/style.css" type="text/css" />
+    	<script type="text/javascript" src="lib/shCore.js"></script>
+    	<script type="text/javascript" src="lib/shBrushJScript.js"></script>
+    	<script type="text/javascript" src="lib/jquery-1.9.0.js"></script>
+    	<script type="text/javascript">
+    		jQuery(function(){
+    			jQuery('#container').html(jQuery('#content').html());
+				SyntaxHighlighter.all();
+			});
+    	</script>
+
+		<script type="text/javascript" id='content'>
+			//将一个匿名函数赋给变量
+			var func1 = function(name){
+				console.log('Hello, ' + name);
+			}
+			func1('张三');
+
+			//将函数当作参数传递
+			function sub(a, b){
+				return a - b;
+			}
+			function doSub(a, b, func){
+				return func(a, b);
+			}
+			console.log(doSub(10, 5, sub));
+
+			//函数当作返回值
+			function add(){
+				return function(a, b){
+					return a + b;
+				}
+			}
+			console.log(add()(10, 5));
+
+			//将函数存储在Array中
+			var arr = [];
+			arr[0] = function(x){ return x * x; };
+			arr[1] = arr[0](2); //arr[1] = 2*2 = 4;
+			arr[2] = arr[0](arr[1]); //arr[2] = 4*4 = 16;
+			arr[3] = arr[0](arr[2]); //arr[3] = 16*16 = 256
+			console.log(arr[3]);
+
+			//函数当作属性
+			var obj = {
+				onStart: function(){console.log("started");},
+				onStop: function(){console.log("stoped");}
+			};
+			obj.onStart();
+			obj.onStop();
+
+			//有用的变种
+			(function (name){
+				console.log('Hello, ' + name);
+			})('张三');
+
+		</script>
+	</head>
+	<body>
+		<h1>02. 函数当作变量、参数、返回值、属性</h1>
+		<pre class="brush:js" id='container'>
+		</pre>
+	</body>
+</html>
